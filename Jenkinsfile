@@ -7,8 +7,9 @@ pipeline {
         NODEJS_PATH = "C:\\Program Files (x86)\\nodejs"
     }
 
-    stages {
-        stage('Install Node.js and npm') {
+    stages{
+
+         stage('Install Node.js and npm') {
             steps {
                 script {
                     def nodejs = tool name: 'NODEJS', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
@@ -16,6 +17,9 @@ pipeline {
                 }
             }
         }
+
+
+
 
         stage('Build Angular') {
             steps {
@@ -29,28 +33,56 @@ pipeline {
             }
         }
 
-       stage('Build Docker Images') {
-    steps {
-        script {
-            docker.build('investinyangular', './InvestinyWeb')
-            docker.build('investinybackend', './Investiny-backend')
-        }
-    }
-}
 
-        stage('Build & rename Docker Image') {
+        stage('Checkout') {
             steps {
                 script {
-                    bat "docker build -t investinyweb:${BUILD_ID} ."
-                    bat "docker tag investinyweb:${BUILD_ID} arijchetoui1/investinyweb:${BUILD_ID}"
+                    checkout scm
                 }
             }
         }
 
-        stage('Run Docker Compose') {
+        stage('Build & rename Docker Image') {
             steps {
                 script {
+                    dir('InvestinyWeb'){
+                    // Build and tag Docker image for Angular project
+                    bat "docker build -t investinyangular:${BUILD_ID} ./"
+                    bat "docker tag investinyangular:${BUILD_ID} arijchetoui1/investinyangular:${BUILD_ID}"
+                     bat "docker push arijchetoui1/investinyangular:${BUILD_ID}"
+                }}
+            }
+        }
+
+        stage('Build Spring Boot Project') {
+            steps {
+                script {
+                    dir('Investiny-backend') {
+                        bat '.\\mvnw clean install'
+                        
+                    }
+                }
+            }
+        }
+
+        stage('Docker Build and Push') {
+            steps {
+                script {
+                    dir('Investiny-backend') {
+                        // Login to Docker Hub
+                        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR')]) {
+                            bat "docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}"
+                        }
+                        // Build, tag, and push Docker image for Spring Boot project
+                        bat 'docker --version'
+                        bat 'docker build -t investinybackend ./'
+                        bat "docker tag investinybackend:latest arijchetoui1/investinybackend:${BUILD_ID}"
+                        // Push Docker image to Docker Hub
+                        bat "docker push arijchetoui1/investinybackend:${BUILD_ID}"
+                    }
+
                     bat 'docker-compose up -d'
+
                 }
             }
         }
@@ -58,12 +90,17 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    def newContainerName = "investinycontainer_${BUILD_ID}"
-                    bat "docker run -d -p 3333:80 --name ${newContainerName} arijchetoui1/investinyweb:${BUILD_ID}"
+                    //suppression du docker-compose de la derniere build
+                    bat "docker-compose down"
+                    // Run Docker container using docker-compose
+                    bat "docker-compose up -d"
                 }
             }
         }
     }
+
+  
+}
 
     post {
         always {
@@ -73,3 +110,4 @@ pipeline {
         }
     }
 }
+
