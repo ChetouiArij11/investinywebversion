@@ -1,18 +1,46 @@
 version: '3'
+
 services:
-  angular_app:
-    image: investinyangular
-    ports:
-      - "4200:4200"
-  springboot_app:
-    image: investinybackend
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres_db
-  postgres_db:
-    image: postgres:latest
+  postgres:
+    image: postgres:15
+    container_name: DB-container
+    restart: always
+    networks: 
+      - net-projet
     environment:
       POSTGRES_DB: investiny
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 0000
+    ports:
+      - "5432:5432"
+    volumes: 
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    image: arijchetoui1/investinybackend:${BUILD_ID}
+    container_name: investinybackend-container
+    restart: always
+    networks:
+      - net-projet
+    ports:
+      - "3333:3333"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 0000
+
+  frontend:
+    image: investinyangular:3
+    container_name: investinyangular-container
+    restart: always
+    networks:
+      - net-projet
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+networks:  
+  net-projet:
