@@ -50,7 +50,7 @@ pipeline {
         stage('Run Docker Compose') {
             steps {
                 script {
-                    sh 'docker-compose up -d'
+                    bat 'docker-compose up -d'
                 }
             }
         }
@@ -68,7 +68,7 @@ pipeline {
     post {
         always {
             script {
-                sh 'docker-compose down'
+                bat 'docker-compose down'
             }
         }
     }
