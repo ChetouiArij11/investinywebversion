@@ -7,9 +7,9 @@ pipeline {
         NODEJS_PATH = "C:\\Program Files (x86)\\nodejs"
     }
 
-    stages{
+    stages {
 
-         stage('Install Node.js and npm') {
+        stage('Install Node.js and npm') {
             steps {
                 script {
                     def nodejs = tool name: 'NODEJS', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
@@ -17,9 +17,6 @@ pipeline {
                 }
             }
         }
-
-
-
 
         stage('Build Angular') {
             steps {
@@ -33,7 +30,6 @@ pipeline {
             }
         }
 
-
         stage('Checkout') {
             steps {
                 script {
@@ -45,12 +41,13 @@ pipeline {
         stage('Build & rename Docker Image') {
             steps {
                 script {
-                    dir('InvestinyWeb'){
-                    // Build and tag Docker image for Angular project
-                    bat "docker build -t investinyangular:${BUILD_ID} ./"
-                    bat "docker tag investinyangular:${BUILD_ID} arijchetoui1/investinyangular:${BUILD_ID}"
-                     bat "docker push arijchetoui1/investinyangular:${BUILD_ID}"
-                }}
+                    dir('InvestinyWeb') {
+                        // Build and tag Docker image for Angular project
+                        bat "docker build -t investinyangular:${BUILD_ID} ./"
+                        bat "docker tag investinyangular:${BUILD_ID} arijchetoui1/investinyangular:${BUILD_ID}"
+                        bat "docker push arijchetoui1/investinyangular:${BUILD_ID}"
+                    }
+                }
             }
         }
 
@@ -59,7 +56,6 @@ pipeline {
                 script {
                     dir('Investiny-backend') {
                         bat '.\\mvnw clean install'
-                        
                     }
                 }
             }
@@ -80,9 +76,6 @@ pipeline {
                         // Push Docker image to Docker Hub
                         bat "docker push arijchetoui1/investinybackend:${BUILD_ID}"
                     }
-
-                    bat 'docker-compose up -d'
-
                 }
             }
         }
@@ -90,7 +83,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    //suppression du docker-compose de la derniere build
+                    // Suppression du docker-compose de la dernière build
                     bat "docker-compose down"
                     // Run Docker container using docker-compose
                     bat "docker-compose up -d"
@@ -98,9 +91,6 @@ pipeline {
             }
         }
     }
-
-  
-}
 
     post {
         always {
@@ -110,4 +100,3 @@ pipeline {
         }
     }
 }
-
