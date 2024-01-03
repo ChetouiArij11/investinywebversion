@@ -7,9 +7,8 @@ pipeline {
         NODEJS_PATH = "C:\\Program Files (x86)\\nodejs"
     }
 
-    stages{
-
-         stage('Install Node.js and npm') {
+    stages {
+        stage('Install Node.js and npm') {
             steps {
                 script {
                     def nodejs = tool name: 'NODEJS', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
@@ -17,8 +16,6 @@ pipeline {
                 }
             }
         }
-
-
 
         stage('Checkout') {
             steps {
@@ -31,12 +28,13 @@ pipeline {
         stage('Build & rename Docker Image') {
             steps {
                 script {
-                    dir('InvestinyWeb'){
-                    // Build and tag Docker image for Angular project
-                    bat "docker build -t investinyangular:${BUILD_ID} ./"
-                    bat "docker tag investinyangular:${BUILD_ID} arijchetoui1/investinyangular:${BUILD_ID}"
-                     bat "docker push arijchetoui1/investinyangular:${BUILD_ID}"
-                }}
+                    dir('InvestinyWeb') {
+                        // Build and tag Docker image for Angular project
+                        bat "docker build -t investinyangular:${BUILD_ID} ./"
+                        bat "docker tag investinyangular:${BUILD_ID} arijchetoui1/investinyangular:${BUILD_ID}"
+                        bat "docker push arijchetoui1/investinyangular:${BUILD_ID}"
+                    }
+                }
             }
         }
 
@@ -45,7 +43,6 @@ pipeline {
                 script {
                     dir('Investiny-backend') {
                         bat '.\\mvnw clean install'
-                        
                     }
                 }
             }
@@ -73,7 +70,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    //suppression du docker-compose de la derniere build
+                    // Suppression du docker-compose de la dernière build
                     bat "docker-compose down"
                     // Run Docker container using docker-compose
                     bat "docker-compose up -d"
@@ -82,5 +79,11 @@ pipeline {
         }
     }
 
-  
+    post {
+        always {
+            script {
+                bat 'docker-compose down'
+            }
+        }
+    }
 }
