@@ -1,0 +1,30 @@
+<div class="container">
+  <h1>Mise à jour du profil</h1>
+  <form (ngSubmit)="modifierUtilisateur()">
+   <div class="form-group">
+      <label for="nom">Nom :</label>
+      <input type="text" class="form-control" id="nom" name="nom" [(ngModel)]="modifiedUtilisateur.nom">
+    </div>
+    <div class="form-group">
+      <label for="prenom">Prénom :</label>
+      <input type="text" class="form-control" id="prenom" name="prenom" [(ngModel)]="modifiedUtilisateur.prenom">
+    </div>
+    <div class="form-group">
+      <label for="email">Adresse E-mail :</label>
+      <input type="email" class="form-control" id="adresseemail" name="adresseemail" [(ngModel)]="modifiedUtilisateur.adresseemail">
+    </div>
+    <div class="form-group">
+      <label for="motdepasse">Mot de passe :</label>
+      <input type="password" class="form-control" id="motdepasse" name="motdepasse" [(ngModel)]="modifiedUtilisateur.motdepasse">
+    </div>
+    <div class="form-group">
+      <label for="imageprofil">Image de profil :</label>
+      <input type="file" class="form-control-file" id="imagedeprofil" name="imagedeprofil" [(ngModel)]="modifiedUtilisateur.imagedeprofil">
+    </div>
+    <div class="form-group">
+      <img  alt="Aperçu de l'image de profil" class="img-thumbnail" style="max-width: 100px;">
+    </div>
+    <button class="btn btn-primary" style="margin-top: 20px;" type="submit">Enregistrer les modifications</button> &nbsp;&nbsp;&nbsp;
+
+  </form>
+</div>

@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="signup-form">
+        <img src="/assets/images/logo.png" alt="Investiny Logo" >
+        <br>
+        <br>
+        <br>
+
+        <form (ngSubmit)="login()">
+          <div class="form-group">
+            <input type="email" class="form-control" placeholder="Adresse e-mail" id="adresseemail" name="adresseemail" [(ngModel)]="adresseemail" required="">
+          </div>
+          <br>
+
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="Mot de passe" id="motdepasse" name="motdepasse" [(ngModel)]="motdepasse" required>
+          </div>
+          <br>
+          <br>
+
+          <button class="btn btn-primary btn-block" type="submit">Connecter</button>
+        </form>
+        <p class="or-divider"><span>OU</span></p>
+        <button class="btn btn-secondary btn-block" [routerLink]="['/register']">Créer un Compte </button>
+        <br><br>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
