@@ -19,13 +19,13 @@ pipeline {
 
         stage('Build Angular') {
             steps {
-                sh 'cd InvestinyWeb && npm install && ng build'
+                bat 'cd InvestinyWeb && npm install && ng build'
             }
         }
 
         stage('Build Spring Boot') {
             steps {
-                sh 'cd Investiny-backend && ./mvnw clean install'
+                bat 'cd Investiny-backend && ./mvnw clean install'
             }
         }
 
