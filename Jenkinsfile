@@ -3,7 +3,7 @@ pipeline {
 
     environment {
          JAVA_HOME = "C:\\Program Files\\Java\\jdk-17" 
-         PATH = "${JAVA_HOME}\\bin:${PATH};C:\\Program Files\\Docker\\cli-plugins
+         PATH = "${JAVA_HOME}\\bin:${PATH};C:\\Program Files\\Docker\\cli-plugins"
         DOCKER_PATH = "C:\\Program Files\\Docker\\cli-plugins"
         PATH = "${DOCKER_PATH}:${PATH}"
         NODEJS_PATH = "C:\\Program Files (x86)\\nodejs"
