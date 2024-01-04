@@ -5,7 +5,7 @@ pipeline {
     environment {
         JAVA_HOME = "C:\\Program Files\\Java\\jdk-17" 
         PATH = "${JAVA_HOME}\\bin:${DOCKER_PATH}:${PATH}"
-        DOCKER_PATH = "C:\\Program Files\\Docker\\cli-plugins"
+       // DOCKER_PATH = "C:\\Program Files\\Docker\\cli-plugins"
         NODEJS_PATH = "C:\\Program Files (x86)\\nodejs"
     }
 
@@ -42,7 +42,7 @@ pipeline {
                         // Build and tag Docker image for Angular project
                         bat "docker build -t investinyangular:${BUILD_ID} ./"
                         bat "docker tag investinyangular:${BUILD_ID} arijchetoui1/investinyangular:${BUILD_ID}"
-                        bat "docker push arijchetoui1/investinyangular:${BUILD_ID}"
+                        //bat "docker push arijchetoui1/investinyangular:${BUILD_ID}"
                     }
                 }
             }
@@ -63,15 +63,15 @@ pipeline {
                 script {
                     dir('Investiny-backend') {
                         // Login to Docker Hub
-                        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR')]) {
-                            bat "docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}"
+                        //withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR')]) {
+                          //  bat "docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}"
                         }
                         // Build, tag, and push Docker image for Spring Boot project
-                        bat 'docker --version'
+                        //bat 'docker --version'
                         bat 'docker build -t investinybackend ./'
-                        bat "docker tag investinybackend:latest arijchetoui1/investinybackend:${BUILD_ID}"
+                        //bat "docker tag investinybackend:latest arijchetoui1/investinybackend:${BUILD_ID}"
                         // Push Docker image to Docker Hub
-                        bat "docker push arijchetoui1/investinybackend:${BUILD_ID}"
+                        //bat "docker push arijchetoui1/investinybackend:${BUILD_ID}"
                     }
                 }
             }
