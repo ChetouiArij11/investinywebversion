@@ -60,16 +60,9 @@ pipeline {
             steps {
                 script {
                     dir('Investiny-backend') {
-                        // Login to Docker Hub
-                        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR')]) {
-                            bat "docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}"
-                        }
-                        // Build, tag, and push Docker image for Spring Boot project
-                        bat 'docker --version'
                         bat 'docker build -t investinybackend ./'
                         bat "docker tag investinybackend:latest arijchetoui1/investinybackend:${BUILD_ID}"
-                        // Push Docker image to Docker Hub
-                        bat "docker push arijchetoui1/investinybackend:${BUILD_ID}"
+                       // bat "docker push arijchetoui1/investinybackend:${BUILD_ID}"
                     }
                 }
             }
@@ -85,12 +78,5 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            script {
-                // Clean up Docker containers after the build
-                bat 'docker-compose down'
-            }
-        }
-    }
+   
 }
