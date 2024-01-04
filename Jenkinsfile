@@ -2,6 +2,8 @@ pipeline {
     agent any
 
     environment {
+         JAVA_HOME = "C:\\Program Files\\Java\\jdk-17" 
+         PATH = "${JAVA_HOME}\\bin:${PATH};C:\\Program Files\\Docker\\cli-plugins
         DOCKER_PATH = "C:\\Program Files\\Docker\\cli-plugins"
         PATH = "${DOCKER_PATH}:${PATH}"
         NODEJS_PATH = "C:\\Program Files (x86)\\nodejs"
@@ -67,11 +69,11 @@ pipeline {
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Run Docker Compose') {
             steps {
                 script {
                     // Suppression du docker-compose de la dernière build
-                    bat "docker-compose down"
+                   // bat "docker-compose down"
                     // Run Docker container using docker-compose
                     bat "docker-compose up -d"
                 }
