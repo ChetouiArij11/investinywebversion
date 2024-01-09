@@ -32,7 +32,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: 0000
 
   frontend:
-    image: investinyangular:3
+    image: arijchetoui1/investinyangular:${BUILD_ID}
     container_name: investinyangular-container
     restart: always
     networks:
