@@ -71,6 +71,7 @@ pipeline {
         stage('Run Docker Compose') {
             steps {
                 script {
+                     bat "docker-compose down"
                     // Run Docker container using docker-compose
                     bat "docker-compose up -d"
                 }
